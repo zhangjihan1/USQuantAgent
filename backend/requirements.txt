@@ -1,0 +1,6 @@
+Flask
+Flask-Cors
+yfinance
+pandas-ta
+PyYAML
+flasgger

@@ -1,0 +1,55 @@
+I want to create a stock analysis app. The tech stack should be as follow:
+
+* frontend UI: react
+* frontend state management: Jotai
+* UI component: material UI (https://mui.com/material-ui/getting-started/)
+* please use Grid design to ensure the UI components on the page to be well aligned with each other and be flexiable for browser window change.
+* Stock Chart: react-stockcharts (https://rrag.github.io/react-stockcharts/)
+
+* Backend Server: python flask
+* Stock data: yfinance (https://ranaroussi.github.io/yfinance/)
+* Stock technical indicators calculation: pandas_ta (https://github.com/Data-Analisys/Technical-Analysis-Indicators---Pandas)
+* OpenAPI 3.1 spec
+* enable CORS feature for the fronend request
+
+* You should create 2 seprate project folders, one for the frontend UI and one for the backend Flask server.
+
+Regarding the functional requirements:
+
+* A feature to generate a stock's multiple support and resistance levels (at least 3 for each) based on the recent 3 years of stock daily trading data. 
+The result should be displayed on the stock candlestick chart.
+You should try to implement the following rules to identify the support and resistances:
+
+1. Historical Price Data: This is the most fundamental method. Look for past price points where the stock has repeatedly reversed direction.
+2. Swing Highs and Lows: Connect at least two significant peaks (swing highs) with a horizontal line to identify a resistance level. Similarly, connect two or more significant troughs (swing lows) to find a support level. The more points a line connects, the stronger the level is considered.
+3. Trendlines: In an uptrend, a line can be drawn connecting the higher lows, which then acts as a dynamic support level. In a downtrend, a line connecting the lower highs acts as dynamic resistance.
+4. Moving Averages: These are dynamic indicators that smooth out price data to create a single flowing line. Commonly used moving averages, such as the 50-day or 200-day, can act as support or resistance. For instance, in an uptrend, the price may bounce off the 50-day moving average.
+5. Fibonacci Retracement: This tool uses percentages based on the Fibonacci sequence to identify potential support and resistance levels. It is particularly useful in trending markets to anticipate where a price might pull back to before continuing the trend.
+6. Pivot Points: These are calculated based on the previous day's high, low, and closing prices to determine multiple potential support and resistance levels for the current day.
+7. Volume Analysis: High trading volume at a particular price level can confirm the strength of a support or resistance level.[2] A spike in volume as the price approaches a support or resistance level can indicate a potential reversal or breakout.[8]
+8. Psychological Levels: Round numbers (e.g., $50, $100) often act as psychological support or resistance levels because many traders place orders at these prices.
+
+
+* A feature to generate a stock's expected price move for the coming weeks end day (i.e. the Friday of each week) based on option IV. The result should also be displayed on a diagram and please refer the attached image "expectedmove.png" as the example.
+
+* A feature allow me to input [stock code] [daily or weekly (drop menu)] [large or small (drop menu)] [number] to identify the date when stock daily or weekly RSI to be large or small then certain number, 
+then show the stock price change for the following 1, 2, 3, 4, 5 weeks in a table. Also calculate the average prices changes 1, 2, 3, 4, 5 weeks for all table rows and the 25th, 50th, 75th, 90th price change percentile. 
+When I click the row of the table, a stock candlestick chart for the following 5 week should be shown on a dialog with technical indicator MACD, RSI, and 5, 10, 20, 30, 50 MA
+
+* A feature allow me to input [stock code] [daily or weekly (drop menu)] [negative or positive (drop menu)] [wheather large then 5 or 10 or 20 or 30 or 50 MA (checkbox)] to 
+identify the date when MACD histogram just turn negative or positive and show the result prices change analysis like in the previous RSI analysis requirement.
+
+* A feature allow me to input [start date] and [end date] then identify MACD [daily or weekly (drop menu)] downtrend or uptrend periods and relevant prices changes during the periods. 
+The result should be shown in a table and when i click the row of the table, the stock of candlestick chart with technical indicator MACD, RSI, and 5, 10, 20, 30, 50 MA should be shown.
+For the row with downtrend, the row background should has red transparent colour, otherwise use green transparent colour.
+
+* For each of the above features, a seperate page should be created for the function. On the top of the stock alaysis app, there should be a header with navigation buttons to go to different pages. 
+When i navigate to a different page and change back to the previous one, the previous content on the page should still be there.
+
+* All the tables on each page should be implemented with React Material Table (https://www.material-react-table.com/), Each table column should have sorting feature enable.
+
+* For each of the above features, the relevant code files should be in different folders for better project maintenance.
+
+* pls implement the backend code first, and you need to run an api endpoint at backend and sure there is no error before start implement the next one.
+
+* Once complete the code implementation, pls run the backend, then the frontend and address any identified issues.
