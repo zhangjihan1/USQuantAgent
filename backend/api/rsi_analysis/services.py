@@ -13,12 +13,12 @@ def get_rsi_analysis(ticker, period, condition, threshold, start_date, end_date)
     if data.empty:
         return {"error": "Could not download data for the ticker."}
 
-    data.ta.rsi(length=14, append=True)
+    data.ta.rsi(length=6, append=True)
     
     if condition == 'large':
-        triggered_dates = data[data['RSI_14'] > threshold].index
+        triggered_dates = data[data['RSI_6'] > threshold].index
     else: # small
-        triggered_dates = data[data['RSI_14'] < threshold].index
+        triggered_dates = data[data['RSI_6'] < threshold].index
 
     results = []
     for date in triggered_dates:
@@ -34,6 +34,7 @@ def get_rsi_analysis(ticker, period, condition, threshold, start_date, end_date)
             
             results.append({
                 "date": date.strftime('%Y-%m-%d'),
+                "rsi_value": round(data.loc[date, 'RSI_6'], 2),
                 **price_changes
             })
 

@@ -35,3 +35,19 @@ This file records architectural and implementation decisions using a list format
     2.  Filter out invalid and duplicate values.
     3.  Separate the levels into `supports` (below current price) and `resistances` (above current price).
     4.  Return the three closest support and resistance levels.
+* * *
+
+[2025-08-04 22:10:00] - Changed RSI Calculation Period
+
+## Decision
+
+*   Changed the RSI calculation period from 14 to 6 in the RSI analysis feature.
+
+## Rationale
+
+*   The user requested a shorter RSI period for the analysis, likely to make it more sensitive to recent price changes.
+
+## Implementation Details
+
+*   The `get_rsi_analysis` function in `backend/api/rsi_analysis/services.py` was updated to use `length=6` in the `data.ta.rsi()` call.
+*   The column name used for filtering was updated from `RSI_14` to `RSI_6`.
