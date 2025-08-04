@@ -39,22 +39,32 @@ def get_support_resistance(ticker):
     else:
         round_numbers = [round(last_price, -1) + i * 10 for i in range(-5, 6)]
 
-    # Combine and clean up levels
-    supports = list(support_levels.tail(5).values) + [s1, s2] + list(data['MA50'].tail(1).values) + list(data['MA200'].tail(1).values)
-    resistances = list(resistance_levels.tail(5).values) + [r1, r2] + list(data['MA50'].tail(1).values) + list(data['MA200'].tail(1).values)
-    
-    if round_numbers:
-        supports.extend([p for p in round_numbers if p < last_price])
-        resistances.extend([p for p in round_numbers if p > last_price])
+    # Combine all potential levels, clean them, and classify them
+    last_price = data['Close'].iloc[-1]
+    all_levels = (
+        list(support_levels.tail(5).values) +
+        list(resistance_levels.tail(5).values) +
+        [s1, s2, r1, r2] +
+        list(data['MA50'].tail(1).values) +
+        list(data['MA200'].tail(1).values) +
+        round_numbers
+    )
 
-    # Remove NaN and duplicates, then sort
-    supports = [s for s in supports if not np.isnan(s)]
-    resistances = [r for r in resistances if not np.isnan(r)]
+    # Remove NaN and duplicates
+    all_levels = sorted(list(set([l for l in all_levels if not np.isnan(l)])))
 
-    final_supports = sorted(list(set(supports)), reverse=True)[:3]
-    final_resistances = sorted(list(set(resistances)))[:3]
+    # Separate into support and resistance based on the last price
+    supports = [level for level in all_levels if level < last_price]
+    resistances = [level for level in all_levels if level > last_price]
+
+    # Get the 3 closest support levels (highest values below current price)
+    final_supports = sorted(supports, reverse=True)[:3]
+
+    # Get the 3 closest resistance levels (lowest values above current price)
+    final_resistances = sorted(resistances)[:3]
 
     return {
         "support": [round(s, 2) for s in final_supports],
-        "resistance": [round(r, 2) for r in final_resistances]
+        "resistance": [round(r, 2) for r in final_resistances],
+        "current_price": round(last_price, 2)
     }
