@@ -31,6 +31,16 @@ def rsi_analysis():
         type: number
         required: true
         description: The RSI threshold value.
+      - name: start_date
+        in: query
+        type: string
+        required: true
+        description: The start date for the analysis (YYYY-MM-DD).
+      - name: end_date
+        in: query
+        type: string
+        required: true
+        description: The end date for the analysis (YYYY-MM-DD).
     responses:
       200:
         description: A table of RSI analysis results.
@@ -41,12 +51,14 @@ def rsi_analysis():
     period = request.args.get('period')
     condition = request.args.get('condition')
     threshold = request.args.get('threshold', type=float)
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
 
-    if not all([ticker, period, condition, threshold is not None]):
+    if not all([ticker, period, condition, threshold is not None, start_date, end_date]):
         return jsonify({"error": "Missing required parameters"}), 400
 
     if period not in ['daily', 'weekly'] or condition not in ['large', 'small']:
         return jsonify({"error": "Invalid parameter value"}), 400
 
-    analysis = get_rsi_analysis(ticker, period, condition, threshold)
+    analysis = get_rsi_analysis(ticker, period, condition, threshold, start_date, end_date)
     return jsonify(analysis)

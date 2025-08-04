@@ -3,13 +3,13 @@ import pandas as pd
 import pandas_ta as ta
 import numpy as np
 
-def get_macd_analysis(ticker, period, direction, ma_filter):
+def get_macd_analysis(ticker, period, direction, ma_filter, start_date, end_date):
     """
     Performs MACD analysis on a stock.
     """
     interval = '1d' if period == 'daily' else '1wk'
     stock = yf.Ticker(ticker)
-    data = stock.history(period="10y", interval=interval)
+    data = stock.history(start=start_date, end=end_date, interval=interval)
     if data.empty:
         return {"error": "Could not download data for the ticker."}
 
