@@ -1,31 +1,11 @@
-from flask import Blueprint, jsonify, request
-import yfinance as yf
+from flask import Blueprint, request
+from .services import get_stock_history
 
-stock_history_blueprint = Blueprint('stock_history', __name__)
+stock_history_blueprint = Blueprint('stock_history_bp', __name__)
 
 @stock_history_blueprint.route('/stock_history', methods=['GET'])
-def stock_history():
-    """
-    Get historical stock data.
-    ---
-    parameters:
-      - name: ticker
-        in: query
-        type: string
-        required: true
-        description: The stock ticker symbol (e.g., AAPL).
-    responses:
-      200:
-        description: A list of historical stock data.
-      400:
-        description: Invalid ticker symbol.
-    """
+def stock_history_route():
     ticker = request.args.get('ticker')
-    if not ticker:
-        return jsonify({"error": "Ticker symbol is required"}), 400
-
-    stock = yf.Ticker(ticker)
-    hist = stock.history(period="3y")
-    hist.reset_index(inplace=True)
-    hist['Date'] = hist['Date'].dt.strftime('%Y-%m-%d')
-    return jsonify(hist.to_dict(orient='records'))
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    return get_stock_history(ticker, start_date, end_date)

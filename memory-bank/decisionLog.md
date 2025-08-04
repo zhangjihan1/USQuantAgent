@@ -51,3 +51,20 @@ This file records architectural and implementation decisions using a list format
 
 *   The `get_rsi_analysis` function in `backend/api/rsi_analysis/services.py` was updated to use `length=6` in the `data.ta.rsi()` call.
 *   The column name used for filtering was updated from `RSI_14` to `RSI_6`.
+* * *
+
+[2025-08-04 22:38:00] - Added Candlestick Chart to RSI Analysis Page
+
+## Decision
+
+*   Implemented a feature to display a candlestick chart in a dialog when a user clicks on a row in the RSI analysis results table.
+
+## Rationale
+
+*   The user requested this feature to provide more detailed, visual analysis of the stock data related to the RSI signals.
+
+## Implementation Details
+
+*   Created a new backend endpoint (`/api/stock_history`) to fetch historical stock data with technical indicators (RSI, MACD, and multiple moving averages).
+*   Created a new React component (`StockChartDialog.js`) to display the candlestick chart using the `react-stockcharts` library.
+*   Modified the `RsiAnalysis.js` page to open the dialog and pass the relevant data when a table row is clicked.
