@@ -41,3 +41,38 @@ This file tracks the project's progress using a task list format.
 
 *   [x] Installed missing `@react-financial-charts` packages.
 *   [x] Corrected imports in `frontend/src/components/StockChartDialog.js`.
+* * *
+
+[2025-08-05 12:46:49] - Fixed MACD Tooltip Rendering Issue
+
+## Completed Tasks
+
+*   [x] Fixed a rendering issue with the `MACDTooltip` by explicitly providing appearance properties.
+* * *
+
+[2025-08-05 13:07:52] - Fixed Empty Candlestick Chart Issue
+
+## Completed Tasks
+
+*   [x] Resolved the empty candlestick chart issue by moving indicator calculations to the backend and standardizing the data format.
+* * *
+
+[2025-08-05 13:13:50] - Fixed Data Structure and Case-Sensitivity Issues
+
+## Completed Tasks
+
+*   [x] Resolved the empty candlestick chart issue by fixing data structure and case-sensitivity issues.
+* * *
+
+[2025-08-05 13:18:20] - Fixed `KeyError` in Backend Service
+
+## Completed Tasks
+
+*   [x] Implemented robust data handling in the backend to prevent crashes when indicator data is unavailable.
+* * *
+
+[2025-08-05 13:22:28] - Fixed Frontend Crash with Null MACD Data
+
+## Completed Tasks
+
+*   [x] Added a null check to the frontend to prevent crashes when MACD data is unavailable.

@@ -103,3 +103,99 @@ This file records architectural and implementation decisions using a list format
 
 *   Installed the missing packages using `npm install`.
 *   Updated the import statement for `CrossHairCursor` to import from `@react-financial-charts/coordinates`.
+* * *
+
+[2025-08-05 12:46:41] - Fixed MACD Tooltip Rendering Issue
+
+## Decision
+
+*   Explicitly defined and passed `appearance` properties to the `MACDSeries` and `MACDTooltip` components in `frontend/src/components/StockChartDialog.js`.
+
+## Rationale
+
+*   The application was crashing with a `TypeError: Cannot read properties of undefined (reading 'strokeStyle')` because the `MACDTooltip` was not receiving the necessary styling information from the `MACDSeries`.
+
+## Implementation Details
+
+*   Created a `macdAppearance` object to define the `strokeStyle` and `fillStyle` for the MACD indicator.
+*   Passed the `macdAppearance` object to the `MACDSeries` component.
+*   Passed both the `options` from the `macdIndicator` and the `macdAppearance` object to the `MACDTooltip` component.
+* * *
+
+[2025-08-05 13:07:42] - Fixed Empty Candlestick Chart Issue
+
+## Decision
+
+*   Moved all technical indicator calculations from the frontend to the backend.
+*   Standardized the data format sent from the backend to match what the frontend charting library expects.
+
+## Rationale
+
+*   The candlestick chart was not rendering because of a mismatch between the data provided by the backend and the data expected by the frontend. The frontend was performing its own calculations, which were incompatible with the data structure it received.
+
+## Implementation Details
+
+*   **Backend (`backend/api/stock_history/services.py`):**
+    *   Changed the moving average calculation from SMA to EMA to match the frontend's requirements.
+    *   Renamed the technical indicator columns (e.g., `RSI_6` to `rsi`) to provide a consistent and predictable data structure.
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Removed all frontend-based technical indicator calculations (`ema`, `rsi`, `macd`).
+    *   Modified the chart components to use the pre-calculated indicator data directly from the API response.
+* * *
+
+[2025-08-05 13:13:36] - Fixed Data Structure and Case-Sensitivity Issues
+
+## Decision
+
+*   Modified the backend to convert all data keys to lowercase.
+*   Restructured the MACD data into a nested object.
+*   Updated the frontend to correctly parse the new data structure.
+
+## Rationale
+
+*   The chart was not rendering due to a case-sensitivity mismatch between the backend data keys (e.g., `Close`) and the frontend's expected keys (e.g., `close`).
+*   The MACD chart's vertical axis was not being calculated correctly because the data was not in the expected nested format.
+
+## Implementation Details
+
+*   **Backend (`backend/api/stock_history/services.py`):**
+    *   Converted all DataFrame column names to lowercase before returning the JSON response.
+    *   Created a nested `macd` object containing the `macd`, `signal`, and `divergence` values.
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Updated the `parsedData` mapping to use the lowercase `date` key.
+    *   Modified the `yExtents` for the MACD chart to correctly calculate the min/max values from the nested `macd` object.
+* * *
+
+[2025-08-05 13:18:11] - Fixed `KeyError` in Backend Service
+
+## Decision
+
+*   Added a check in the backend service to ensure that MACD columns exist before attempting to process them.
+
+## Rationale
+
+*   The application was crashing with a `KeyError: 'macd_value'` when the historical data was too short to calculate the MACD indicator.
+
+## Implementation Details
+
+*   **Backend (`backend/api/stock_history/services.py`):**
+    *   Added a conditional check to see if the `macd_value`, `macd_signal`, and `macd_histogram` columns exist in the DataFrame.
+    *   If the columns exist, they are nested into a `macd` object as before.
+    *   If the columns do not exist, the `macd` column is set to `None` to prevent the application from crashing.
+* * *
+
+[2025-08-05 13:22:18] - Fixed Frontend Crash with Null MACD Data
+
+## Decision
+
+*   Added a conditional check in the frontend component to ensure that the MACD chart is only rendered when the `macd` data is not `null`.
+
+## Rationale
+
+*   The application was crashing with a `TypeError: Cannot read properties of null (reading 'macd')` when the backend returned `null` for the `macd` field.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Wrapped the MACD `Chart` component in a conditional check (`data.some(d => d.macd) && ...`) to ensure it only renders when at least one data point has a non-null `macd` value.
+    *   Added a ternary operator to the `yExtents` of the MACD chart to prevent errors when the `macd` data is `null`.
