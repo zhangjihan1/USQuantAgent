@@ -68,3 +68,38 @@ This file records architectural and implementation decisions using a list format
 *   Created a new backend endpoint (`/api/stock_history`) to fetch historical stock data with technical indicators (RSI, MACD, and multiple moving averages).
 *   Created a new React component (`StockChartDialog.js`) to display the candlestick chart using the `react-stockcharts` library.
 *   Modified the `RsiAnalysis.js` page to open the dialog and pass the relevant data when a table row is clicked.
+* * *
+
+[2025-08-05 12:37:49] - Replaced `react-stockcharts` with `@react-financial-charts`
+
+## Decision
+
+*   Switched from the unmaintained `react-stockcharts` library to the actively maintained `@react-financial-charts` fork.
+
+## Rationale
+
+*   The `react-stockcharts` library was causing a "subscribe is not a function" TypeError due to incompatibility with modern React versions (16.3+).
+*   The `@react-financial-charts` library is a drop-in replacement that resolves this issue and ensures ongoing compatibility and support.
+
+## Implementation Details
+
+*   Uninstalled `react-stockcharts`.
+*   Installed the following packages: `@react-financial-charts/core`, `@react-financial-charts/series`, `@react-financial-charts/axes`, `@react-financial-charts/tooltip`, `d3-format`, `d3-time-format`, and `prop-types`.
+*   Updated the import statements in `frontend/src/components/StockChartDialog.js` to reflect the new package structure.
+* * *
+
+[2025-08-05 12:40:11] - Corrected Charting Library Implementation
+
+## Decision
+
+*   Installed missing `@react-financial-charts/indicators` and `@react-financial-charts/coordinates` packages.
+*   Corrected the import path for `CrossHairCursor` in `frontend/src/components/StockChartDialog.js`.
+
+## Rationale
+
+*   The previous implementation was missing necessary packages and had an incorrect import path, which caused the application to fail.
+
+## Implementation Details
+
+*   Installed the missing packages using `npm install`.
+*   Updated the import statement for `CrossHairCursor` to import from `@react-financial-charts/coordinates`.
