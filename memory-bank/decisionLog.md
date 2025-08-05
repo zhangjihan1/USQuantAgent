@@ -199,3 +199,55 @@ This file records architectural and implementation decisions using a list format
 *   **Frontend (`frontend/src/components/StockChartDialog.js`):**
     *   Wrapped the MACD `Chart` component in a conditional check (`data.some(d => d.macd) && ...`) to ensure it only renders when at least one data point has a non-null `macd` value.
     *   Added a ternary operator to the `yExtents` of the MACD chart to prevent errors when the `macd` data is `null`.
+* * *
+
+[2025-08-05 13:32:09] - Acknowledged `UNSAFE_componentWillMount` Warning
+
+## Decision
+
+*   Acknowledged the `UNSAFE_componentWillMount` warning originating from the `@react-financial-charts` library. No code changes will be made to address this.
+
+## Rationale
+
+*   The warning is an internal issue within the third-party library and does not cause any functional problems or crashes in the application.
+*   The project is already using the latest version of the library, so an update is not possible.
+*   Suppressing the warning is the most practical approach, as directly modifying the library's code is not feasible.
+
+## Implementation Details
+
+*   No code changes were implemented. The decision was made to accept the warning as a known issue with the third-party dependency.
+* * *
+
+[2025-08-05 13:38:45] - Fixed State Management Issue in Stock Chart Dialog
+
+## Decision
+
+*   Added a `useEffect` hook to the `StockChartDialog` component to reset its internal `data` state to `null` whenever the dialog is closed.
+
+## Rationale
+
+*   The application was crashing with a `TypeError: Cannot read properties of null (reading 'date')` when reopening the chart for the same stock. This was caused by the component retaining stale data from the previous render.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   A new `useEffect` hook was added that triggers when the `open` prop changes.
+    *   If the `open` prop is `false`, the `setData` state updater is called with `null` to clear the old chart data.
+* * *
+
+[2025-08-05 13:43:21] - Removed Technical Indicators from Stock Chart
+
+## Decision
+
+*   Removed all technical indicators (MACD, RSI, and Moving Averages) from the stock chart feature.
+
+## Rationale
+
+*   The user requested a cleaner chart that only displays the candlestick series.
+
+## Implementation Details
+
+*   **Backend (`backend/api/stock_history/services.py`):**
+    *   Removed all code related to calculating and returning technical indicators.
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Removed all imports, components, and logic related to displaying the indicator charts and tooltips.

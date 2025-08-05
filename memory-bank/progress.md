@@ -76,3 +76,24 @@ This file tracks the project's progress using a task list format.
 ## Completed Tasks
 
 *   [x] Added a null check to the frontend to prevent crashes when MACD data is unavailable.
+* * *
+
+[2025-08-05 13:32:21] - Acknowledged `UNSAFE_componentWillMount` Warning
+
+## Completed Tasks
+
+*   [x] Investigated the `UNSAFE_componentWillMount` warning and determined it to be a non-critical issue within a third-party library.
+* * *
+
+[2025-08-05 13:38:55] - Fixed State Management Issue in Stock Chart Dialog
+
+## Completed Tasks
+
+*   [x] Resolved a state management issue that caused the chart to crash on second view.
+* * *
+
+[2025-08-05 13:43:31] - Removed Technical Indicators from Stock Chart
+
+## Completed Tasks
+
+*   [x] Removed all technical indicators from the stock chart to provide a cleaner view.
