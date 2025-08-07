@@ -251,3 +251,37 @@ This file records architectural and implementation decisions using a list format
     *   Removed all code related to calculating and returning technical indicators.
 *   **Frontend (`frontend/src/components/StockChartDialog.js`):**
     *   Removed all imports, components, and logic related to displaying the indicator charts and tooltips.
+[2025-08-05 14:34:00] - Corrected Implied Volatility Calculation
+
+## Decision
+
+*   Changed the expected move calculation to be based on the at-the-money (ATM) straddle price instead of relying on the `impliedVolatility` field from the `yfinance` library.
+
+## Rationale
+
+*   The `yfinance` library was providing highly inaccurate implied volatility data (e.g., 0.2% during an earnings week), leading to incorrect expected move calculations.
+*   Calculating the expected move from the ATM straddle (sum of the ATM call and put prices) is a more direct and reliable method that uses actual market prices.
+*   The implied volatility is now back-calculated from this more accurate expected move, ensuring the displayed IV is meaningful and correct.
+
+## Implementation Details
+
+*   **Backend (`backend/api/expected_move/services.py`):**
+    *   The logic was updated to fetch the bid/ask prices for the ATM call and put options.
+    *   The `expected_move` is now calculated as `atm_call_price + atm_put_price`.
+    *   The `implied_volatility` is then derived from the `expected_move` for display.
+* * *
+[2025-08-07 12:20:07] - Fixed Chart Crash on Second Open
+
+## Decision
+
+*   Added `setLoading(false)` to the `useEffect` hook that clears the component's state when the `StockChartDialog` is closed.
+
+## Rationale
+
+*   The application was crashing with a `TypeError: Cannot read properties of null (reading 'date')` when reopening the chart. This was caused by the component retaining a `loading` state of `false` from the previous render, which caused the chart to attempt to render with `null` data before new data was fetched. Resetting the `loading` state ensures the component shows a loading indicator instead of attempting to render an empty chart.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   The `useEffect` hook that triggers when the `open` prop changes was updated to also call `setLoading(false)`.
+* * *

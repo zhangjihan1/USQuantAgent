@@ -46,7 +46,9 @@ def get_expected_move(ticker):
         # Find the at-the-money (ATM) strike
         atm_strike = min(opts.calls['strike'], key=lambda x:abs(x-last_price))
         
-        # Get the IV for the ATM call and put
+        # Calculate the expected move from the at-the-money (ATM) straddle price.
+        # This is a more reliable method than using the 'impliedVolatility' field directly,
+        # especially around events like earnings.
         try:
             atm_call = opts.calls[opts.calls['strike'] == atm_strike]
             atm_put = opts.puts[opts.puts['strike'] == atm_strike]
@@ -54,24 +56,39 @@ def get_expected_move(ticker):
             if atm_call.empty or atm_put.empty:
                 continue
 
-            atm_call_iv = atm_call['impliedVolatility'].iloc[0]
-            atm_put_iv = atm_put['impliedVolatility'].iloc[0]
+            # Use the mid-price (average of bid and ask) for better accuracy.
+            # Fallback to lastPrice if bid/ask is not available.
+            atm_call_bid = atm_call['bid'].iloc[0]
+            atm_call_ask = atm_call['ask'].iloc[0]
+            if atm_call_bid == 0 or atm_call_ask == 0:
+                atm_call_price = atm_call['lastPrice'].iloc[0]
+            else:
+                atm_call_price = (atm_call_bid + atm_call_ask) / 2
+
+            atm_put_bid = atm_put['bid'].iloc[0]
+            atm_put_ask = atm_put['ask'].iloc[0]
+            if atm_put_bid == 0 or atm_put_ask == 0:
+                atm_put_price = atm_put['lastPrice'].iloc[0]
+            else:
+                atm_put_price = (atm_put_bid + atm_put_ask) / 2
+            
+            expected_move = atm_call_price + atm_put_price
+
+            # Calculate days to expiration
+            days_to_expiration = (expiration_date - today).days
+            if days_to_expiration <= 0:
+                continue
+
+            # Back-calculate the implied volatility from the expected move for display purposes.
+            # Formula: IV = (Expected Move / Stock Price) / sqrt(DTE / 365)
+            if last_price > 0 and days_to_expiration > 0:
+                avg_iv = (expected_move / last_price) / np.sqrt(days_to_expiration / 365)
+            else:
+                avg_iv = 0
+
         except (IndexError, KeyError):
-            # Skip if IV is not available for this strike
+            # Skip if essential option data is not available for this strike
             continue
-
-        # Average the IV
-        avg_iv = (atm_call_iv + atm_put_iv) / 2
-        
-        # Calculate days to expiration
-        days_to_expiration = (expiration_date - today).days
-        
-        # If DTE is 0, it can cause a division by zero or meaningless result, so skip.
-        if days_to_expiration <= 0:
-            continue
-
-        # Calculate expected move
-        expected_move = last_price * avg_iv * np.sqrt(days_to_expiration / 365)
         
         results.append({
             "ticker": ticker,

@@ -97,3 +97,15 @@ This file tracks the project's progress using a task list format.
 ## Completed Tasks
 
 *   [x] Removed all technical indicators from the stock chart to provide a cleaner view.
+[2025-08-05 14:34:18] - Fixed Implied Volatility Calculation
+
+## Completed Tasks
+
+*   [x] Corrected the implied volatility and expected move calculation in the `expected_move` service.
+* * *
+[2025-08-07 12:20:18] - Fixed Chart Crash on Second Open
+
+## Completed Tasks
+
+*   [x] Resolved a state management issue that caused the chart to crash on second view by resetting the loading state.
+* * *
