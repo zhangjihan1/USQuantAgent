@@ -285,3 +285,33 @@ This file records architectural and implementation decisions using a list format
 *   **Frontend (`frontend/src/components/StockChartDialog.js`):**
     *   The `useEffect` hook that triggers when the `open` prop changes was updated to also call `setLoading(false)`.
 * * *
+[2025-08-07 12:24:23] - Fixed Chart Candlestick Distribution
+
+## Decision
+
+*   Removed the `xExtents` prop from the `ChartCanvas` component in `frontend/src/components/StockChartDialog.js`.
+
+## Rationale
+
+*   The chart's x-axis was being stretched to the current date, causing the candlesticks to be bunched up on the left side of the chart. By removing the `xExtents` prop, the chart will now automatically determine the appropriate date range based on the data it receives, ensuring the candlesticks are spread evenly across the chart.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   The `xExtents` prop was removed from the `ChartCanvas` component.
+* * *
+[2025-08-07 12:27:18] - Refactored State Management in Stock Chart Dialog
+
+## Decision
+
+*   Consolidated the two `useEffect` hooks in `frontend/src/components/StockChartDialog.js` into a single hook.
+
+## Rationale
+
+*   The application was still crashing with a `TypeError: Cannot read properties of null (reading 'date')` when reopening the chart, despite previous fixes. This was due to a race condition where the component's state was not being reliably reset. Consolidating the logic into a single `useEffect` hook ensures that the data fetching and state cleanup are handled in a more robust and predictable manner, preventing the crash.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   The two `useEffect` hooks were merged into one. The new hook now handles both fetching data when the dialog opens and clearing the data when it closes.
+* * *

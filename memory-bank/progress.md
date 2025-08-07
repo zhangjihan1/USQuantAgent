@@ -109,3 +109,15 @@ This file tracks the project's progress using a task list format.
 
 *   [x] Resolved a state management issue that caused the chart to crash on second view by resetting the loading state.
 * * *
+[2025-08-07 12:24:33] - Fixed Chart Candlestick Distribution
+
+## Completed Tasks
+
+*   [x] Corrected the candlestick distribution on the stock chart by removing the hardcoded date range.
+* * *
+[2025-08-07 12:27:27] - Refactored State Management in Stock Chart Dialog
+
+## Completed Tasks
+
+*   [x] Finally resolved the chart crash issue by refactoring the state management logic into a single, more robust `useEffect` hook.
+* * *
