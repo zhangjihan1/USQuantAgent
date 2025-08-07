@@ -121,3 +121,22 @@ This file tracks the project's progress using a task list format.
 
 *   [x] Finally resolved the chart crash issue by refactoring the state management logic into a single, more robust `useEffect` hook.
 * * *
+[2025-08-07 12:29:56] - Refactored Chart State Management with Jotai
+
+## Completed Tasks
+
+*   [x] Resolved the persistent chart crash issue by refactoring the state management to use the Jotai library.
+* * *
+[2025-08-07 12:36:
+18] - Implemented Robust Guard for Chart Rendering
+
+## Completed Tasks
+
+*   [x] Finally resolved the persistent chart crash by implementing a more robust guard to prevent rendering with invalid data.
+* * *
+[2025-08-07 12:54:48] - Added Extensive Logging for Debugging
+
+## Current Tasks
+
+*   [ ] Debugging the persistent chart crash by adding extensive logging to trace the data lifecycle.
+* * *
