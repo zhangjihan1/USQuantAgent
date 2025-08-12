@@ -337,35 +337,3 @@ This file records architectural and implementation decisions using a list format
     *   Refactored the component to use the `useSetAtom` hook to update the global chart state when a table row is clicked.
 * * *
 [2025-08-07 12:36:08] - Implemented Robust Guard for Chart Rendering
-
-## Decision
-
-*   Added a more explicit conditional check in `frontend/src/components/StockChartDialog.js` to ensure the `ChartCanvas` is only rendered when the `data` is a valid, non-empty array.
-
-## Rationale
-
-*   The application was still crashing with a `TypeError: Cannot read properties of null (reading 'date')` due to a persistent race condition where the chart component would attempt to render before its `data` prop was populated.
-*   The previous fixes were not sufficient to prevent this timing issue. By implementing a more robust defensive guard, it is now impossible for the chart to render with invalid data, which will prevent the crash.
-
-## Implementation Details
-
-*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
-    *   The rendering logic was updated to use a more explicit conditional check (`!loading && data && data.length > 0`) to ensure the `ChartCanvas` is only rendered when the data is valid.
-* * *
-[2025-08-07 12:54:33] - Added Extensive Logging for Debugging
-
-## Decision
-
-*   Added extensive `console.log` statements to the `frontend/src/components/StockChartDialog.js` component to trace the data lifecycle.
-
-## Rationale
-
-*   Despite multiple attempts to fix the persistent `TypeError: Cannot read properties of null (reading 'date')` error, the root cause remains elusive. The issue is clearly related to data integrity, but the exact point of failure is not yet known.
-*   By adding extensive logging, we can now inspect the data at every stage of its lifecycle—from the moment it's received from the backend to the moment it's passed to the charting library. This will provide the necessary visibility to identify the exact point of failure and apply a definitive fix.
-
-## Implementation Details
-
-*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
-    *   Added `console.log` statements to log the raw data from the backend, the parsed data, and the data just before it's passed to the chart.
-    *   Added a loop to iterate over the data and log any invalid entries.
-* * *
