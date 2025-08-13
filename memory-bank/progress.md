@@ -140,3 +140,21 @@ This file tracks the project's progress using a task list format.
 
 *   [ ] Debugging the persistent chart crash by adding extensive logging to trace the data lifecycle.
 * * *
+[2025-08-13 01:23:03] - Added Hover Tooltip to Stock Chart
+
+## Completed Tasks
+
+*   [x] Added a hover tooltip to the stock chart.
+* * *
+[2025-08-13 02:15:49] - Corrected Tooltip Implementation
+
+## Completed Tasks
+
+*   [x] Replaced the tooltip component on the stock chart to fix a display issue.
+* * *
+[2025-08-13 02:18:44] - Added Price Change to Tooltip
+
+## Completed Tasks
+
+*   [x] Added the daily price change to the stock chart tooltip.
+* * *

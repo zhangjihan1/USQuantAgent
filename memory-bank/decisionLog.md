@@ -337,3 +337,53 @@ This file records architectural and implementation decisions using a list format
     *   Refactored the component to use the `useSetAtom` hook to update the global chart state when a table row is clicked.
 * * *
 [2025-08-07 12:36:08] - Implemented Robust Guard for Chart Rendering
+
+[2025-08-13 01:22:54] - Added Hover Tooltip to Stock Chart
+
+## Decision
+
+*   Added a hover tooltip to the stock chart to display the date, open, high, low, and close values for each candlestick.
+
+## Rationale
+
+*   The user requested this feature to provide more detailed information when hovering over the chart.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Configured the `OHLCTooltip` component to display the date and OHLC values in the desired format.
+* * *
+
+[2025-08-13 02:15:37] - Corrected Tooltip Implementation on Stock Chart
+
+## Decision
+
+*   Replaced the `<OHLCTooltip />` component with `<HoverTooltip />` in the stock chart.
+
+## Rationale
+
+*   The previous `OHLCTooltip` was not displaying correctly. The user requested to use a different tooltip component and provided a reference to the documentation for the correct implementation. The `<HoverTooltip />` provides the desired functionality.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Replaced the `OHLCTooltip` import and component with `HoverTooltip`.
+    *   Configured the `HoverTooltip` to display the date, open, high, low, and close values.
+* * *
+
+[2025-08-13 02:18:34] - Added Price Change to Stock Chart Tooltip
+
+## Decision
+
+*   Added the daily price change and percentage change to the hover tooltip on the stock chart.
+
+## Rationale
+
+*   The user requested this feature to provide more context on the daily price movement of the stock.
+
+## Implementation Details
+
+*   **Frontend (`frontend/src/components/StockChartDialog.js`):**
+    *   Modified the `HoverTooltip` component to calculate the difference between the current day's close and the previous day's close.
+    *   Added the calculated change and percentage change to the tooltip content.
+* * *
